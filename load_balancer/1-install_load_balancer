@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Install and configure haproxy.
+
+# update system
+sudo apt update
+# install haproxy
+sudo apt install haproxy -y
+load_balance_config=\
+"
+listen  4808-lb-01
+frontend haproxy_inbound
+        bind *:80
+        mode http
+        default_backend my_servers
+backend my_servers
+        balance roundrobin
+        mode http
+        server 4854-web-01 54.90.242.56 check
+        server 4854-web-02 52.204.221.173 check
+"
+# add the new configuration to the the haproxy.conf file
+sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+sudo cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.bak
+sudo sed -i "\$a $load_balance_config" /etc/haproxy/haproxy.cfg
