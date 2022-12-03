@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# runninng nginx back to port 8080
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+sudo service nginx restart
+sudo pkill -o nginx
