@@ -1,9 +1,9 @@
-# Web Stack debugging fix typo in config file
-exec { 'fix-wordpress':
- ienvironment => ['DIR=/var/www/html/wp-settings.php',
-                  'OLD=phpp',
-                  'NEW=php'],
-  command     => 'sudo sed -i "s/$OLD/$NEW/" $DIR',
+# Web Stack debugging increase limit of open files per user
+exec { 'fix--for-nginx':
+  environment => ['DIR=/etc/default/nginx',
+                  'OLD=ULIMIT="-n 15"',
+                  'NEW=ULIMIT="-n 15000"'],
+  command     => 'sudo sed -i "s/$OLD/$NEW/" $DIR; sudo service nginx restart',
   path        => ['/usr/bin', '/bin'],
   returns     => [0, 1]
 }
